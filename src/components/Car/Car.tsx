@@ -47,7 +47,6 @@ export function Car({
         source={{ uri: data.thumbnail }}
         resizeMode='contain'
       />
-
     </Container>
   );
 }
