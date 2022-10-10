@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'react-native';
+import { useNavigation } from '@react-navigation/native'
 import {
+  CarList,
   Container,
   Header,
   HeaderContent,
@@ -9,27 +11,33 @@ import {
 import Logo from '../../assets/logo.svg'
 import { RFValue } from 'react-native-responsive-fontsize'
 import { Car } from '../../components/Car';
+import { api } from '../../services/api';
+import { CarDTO } from '../../dtos/CarDTO';
+import { Load } from '../../components/Load';
 
 export function Home() {
-  const carData1 = {
-    brand: 'AUDI',
-    name: 'RS 5 Coupé',
-    rent: {
-      period: 'AO DIA',
-      price: 120,
-    },
-    thumbnail: 'https://img1.gratispng.com/20171220/kiq/audi-png-car-image-5a3b1f1eb47de9.9104985015138240307393.jpg',
+  const navigation = useNavigation();
+  const [cars, setCars] = useState<CarDTO[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  function handleCarDetails(car: CarDTO) {
+    navigation.navigate('CarDetails', { car });
   }
 
-  const carData2 = {
-    brand: 'AUDI',
-    name: 'RS 5 Coupé',
-    rent: {
-      period: 'AO DIA',
-      price: 120,
-    },
-    thumbnail: 'https://img1.gratispng.com/20171220/kiq/audi-png-car-image-5a3b1f1eb47de9.9104985015138240307393.jpg',
-  }
+  useEffect(() => {
+    async function fetchCars() {
+      try {
+        const response = await api.get('/cars');
+        setCars(response.data);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchCars()
+  }, [])
 
   return (
     <Container>
@@ -52,8 +60,13 @@ export function Home() {
         </HeaderContent>
       </Header>
 
-      <Car data={carData1} />
-      <Car data={carData2} />
+      {isLoading ? <Load /> :
+        <CarList
+          data={cars}
+          keyExtractor={item => item.id}
+          renderItem={(({ item }) =>
+            <Car data={item} onPress={() => handleCarDetails(item)} />)}
+        />}
 
     </Container>
   );
