@@ -7,7 +7,7 @@ import { Car } from '../../components/Car';
 import { CarDTO } from '../../dtos/CarDTO';
 import { AntDesign } from '@expo/vector-icons';
 import { api } from '../../services/api';
-import { Load } from '../../components/Load';
+import { LoadAnimation } from '../../components/LoadAnimation';
 import {
   Container,
   Header,
@@ -71,16 +71,15 @@ export function MyCars() {
         />
 
         <Title>
-          Escolha uma {'\n'}
-          data de início e {'\n'}
-          fim do aluguel
+          Seus agendamentos
+          estão aqui.
         </Title>
 
         <SubTitle>
           Conforto, segurança e praticidade.
         </SubTitle>
       </Header>
-      {isLoading ? <Load /> :
+      {isLoading ? <LoadAnimation /> :
         <Content>
           <Appointments>
             <AppointmentsTitle>Agendamentos feitos</AppointmentsTitle>
