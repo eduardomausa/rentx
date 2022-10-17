@@ -34,7 +34,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { CarDTO } from '../../dtos/CarDTO';
 import { getAccessoryIcon } from '../../utils/getAccessoryIcon';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { getPlatformDate } from '../../utils/getPlataformDate';
 import { api } from '../../services/api';
 import { Alert } from 'react-native';
@@ -91,8 +91,8 @@ export function ScheduleDetails() {
 
   useEffect(() => {
     setRentalPeriod({
-      start: format(getPlatformDate(new Date(dates[0])), 'dd/MM/yyyy'),
-      end: format(getPlatformDate(new Date(dates[dates.length - 1])), 'dd/MM/yyyy'),
+      start: format(parseISO(dates[0]), 'dd/MM/yyyy'),
+      end: format(parseISO(dates[dates.length - 1]), 'dd/MM/yyyy'),
     })
   }, [])
 
